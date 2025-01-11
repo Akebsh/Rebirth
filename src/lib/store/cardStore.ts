@@ -48,7 +48,9 @@ export const deck_store = writable<Card[]>([
 ]);
 export const hand_store = writable<Card[]>([]);
 export const entry_store = writable<Card[]>([]);
+export const pickCard = writable<Card | null>(null);
 
+//드로우 함수
 export function drawCard() {
   let current_deck: Card[] = [];
   let current_hand: Card[] = [];
@@ -77,6 +79,13 @@ export function drawCard() {
   }
 }
 
+// 카드 선택 함수
+export function selectCard(card: Card) {
+  pickCard.set(card); // 선택된 카드를 상태로 저장
+  console.log("카드 선택됨:", card.name);
+}
+
+// 엔트리존 이동
 export function moveToEntryZone(cardToMove: Card) {
   let current_hand: Card[] = [];
   let current_entry: Card[] = [];
@@ -95,15 +104,15 @@ export function moveToEntryZone(cardToMove: Card) {
     return;
   }
 
-  const selected_card = current_hand.findIndex(
+  const selected_card_index = current_hand.findIndex(
     (card) => card.serial_number === cardToMove.serial_number
   );
 
-  if (selected_card !== -1) {
-    const [moved_card] = current_hand.splice(selected_card, 1);
+  if (selected_card_index !== -1) {
+    const [moved_card] = current_hand.splice(selected_card_index, 1);
     entry_store.set([...current_entry, moved_card]);
     hand_store.set(current_hand);
-    console.log("핸드에서 엔트리로 이동: ", moved_card.name);
+    console.log("핸드에서 엔트리로 이동:", moved_card.name);
   } else {
     console.log("해당하는 카드가 없습니다.");
   }

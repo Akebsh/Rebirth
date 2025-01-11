@@ -1,6 +1,7 @@
 <script lang="ts">
     import { moveToEntryZone } from "$lib/store/cardStore";
-
+    import { selectCard } from "$lib/store/cardStore"; // 
+    
     export let serial_number: string;
     export let name: string;
     export let description: string;
@@ -15,6 +16,16 @@
 
 
     function isClicked(event: MouseEvent) {
+        selectCard({
+            serial_number,
+            name,
+            description,
+            image_url,
+            atk,
+            hp,
+            position,
+            is_flipped
+        }); // 카드 선택
         show_action = true;
     }
 

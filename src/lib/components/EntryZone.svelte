@@ -1,7 +1,22 @@
 <script lang="ts">
     import Card from "./Card.svelte";
+    import { pickCard, moveToEntryZone } from "$lib/store/cardStore";
+    import { get } from "svelte/store";
 
     export let entry_list: Array<any>;
+
+        function handleClick() {
+    console.log("EntryZone 클릭됨"); // 클릭 이벤트 확인
+    const selectedCard = get(pickCard);
+    if (selectedCard) {
+        console.log("선택된 카드:", selectedCard); // 선택된 카드 정보 확인
+        moveToEntryZone(selectedCard);
+        pickCard.set(null);
+    } else {
+        console.log("선택된 카드가 없습니다.");
+    }
+}
+
 </script>
 
 <style>
@@ -25,7 +40,7 @@
 </style>
 
 <div class="zone-title">EntryZone</div>
-<div class="entry-zone">
+<div class="entry-zone" on:click={handleClick}>
     {#each entry_list as card}
         <div class="card-container">
             <Card
