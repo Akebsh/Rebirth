@@ -1,6 +1,7 @@
 <script lang="ts">
     import { moveToEntryZone } from "$lib/store/cardStore";
-    import { selectCard } from "$lib/store/cardStore"; // 
+    import { selectCard } from "$lib/store/cardStore"; 
+    import { moveCardToDeckTop, moveCardToDeckBottom } from "$lib/store/cardStore";
     
     export let serial_number: string;
     export let name: string;
@@ -12,7 +13,7 @@
     export let is_flipped: boolean = false;
 
     let show_action = false;
-    let actions = ["엔트리 존 이동", "덱 맨 아래로"];
+    let actions = ["덱 맨 위로", "덱 맨 아래로"];
 
 
     function isClicked(event: MouseEvent) {
@@ -30,8 +31,8 @@
     }
 
     function hideAction(action: string) {
-        if (action === "엔트리 존 이동") {
-            moveToEntryZone({
+        if (action === "덱 맨 위로") {
+            moveCardToDeckTop({
                 serial_number,
                 name,
                 description,
@@ -40,9 +41,18 @@
                 hp,
                 position,
                 is_flipped
-            })
+            });
         } else if (action === "덱 맨 아래로") {
-            console.log("덱 맨 아래로");
+            moveCardToDeckBottom({
+                serial_number,
+                name,
+                description,
+                image_url,
+                atk,
+                hp,
+                position,
+                is_flipped
+            });
         }
         show_action = false;
     }

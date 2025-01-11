@@ -14,7 +14,7 @@ interface Card {
 export const deck_store = writable<Card[]>([
   {
     serial_number: "CP-0003",
-    name: "프로모",
+    name: "프로모1",
     description: "のびしろ",
     image_url:
       "https://s3-ap-northeast-1.amazonaws.com/rebirth-fy.com/wordpress/wp-content/images/cardlist/PR/cp_0003.png",
@@ -25,7 +25,7 @@ export const deck_store = writable<Card[]>([
   },
   {
     serial_number: "CP-0003",
-    name: "프로모",
+    name: "프로모2",
     description: "のびしろ",
     image_url:
       "https://s3-ap-northeast-1.amazonaws.com/rebirth-fy.com/wordpress/wp-content/images/cardlist/PR/cp_0003.png",
@@ -36,7 +36,7 @@ export const deck_store = writable<Card[]>([
   },
   {
     serial_number: "CP-0003",
-    name: "프로모",
+    name: "프로모3",
     description: "のびしろ",
     image_url:
       "https://s3-ap-northeast-1.amazonaws.com/rebirth-fy.com/wordpress/wp-content/images/cardlist/PR/cp_0003.png",
@@ -66,7 +66,7 @@ export function drawCard() {
   });
 
   if (current_deck.length > 0) {
-    const drawn_card = current_deck.pop();
+    const drawn_card = current_deck.shift();
     if (drawn_card) {
       hand_store.set([...current_hand, drawn_card]);
     }
@@ -116,4 +116,46 @@ export function moveToEntryZone(cardToMove: Card) {
   } else {
     console.log("해당하는 카드가 없습니다.");
   }
+}
+
+// 핸드의 카드를 덱 맨 위로 이동시키는 함수
+export function moveCardToDeckTop(cardToMove: Card) {
+  hand_store.update((hand) => {
+    const cardIndex = hand.findIndex(
+      (card) => card.serial_number === cardToMove.serial_number
+    );
+
+    if (cardIndex !== -1) {
+      const [movedCard] = hand.splice(cardIndex, 1);
+      deck_store.update((deck) => {
+        console.log("카드를 덱 맨 위로 이동:", movedCard.name);
+        return [movedCard, ...deck];
+      });
+      return hand;
+    } else {
+      console.log("해당하는 카드가 없습니다.");
+      return hand;
+    }
+  });
+}
+
+// 핸드의 카드를 덱 맨 아래로 이동시키는 함수
+export function moveCardToDeckBottom(cardToMove: Card) {
+  hand_store.update((hand) => {
+    const cardIndex = hand.findIndex(
+      (card) => card.serial_number === cardToMove.serial_number
+    );
+
+    if (cardIndex !== -1) {
+      const [movedCard] = hand.splice(cardIndex, 1);
+      deck_store.update((deck) => {
+        console.log("카드를 덱 맨 아래로 이동:", movedCard.name);
+        return [...deck, movedCard];
+      });
+      return hand;
+    } else {
+      console.log("해당하는 카드가 없습니다.");
+      return hand;
+    }
+  });
 }
