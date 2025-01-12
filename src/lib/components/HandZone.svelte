@@ -36,6 +36,7 @@
               hp={card.hp}
               position={card.position}
               is_flipped={false}
+              zone="hand" 
           />
       </div>
   {/each}

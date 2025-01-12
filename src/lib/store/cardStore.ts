@@ -9,6 +9,7 @@ interface Card {
   hp: number;
   position: number;
   is_flipped: boolean;
+  zone?: "hand" | "entry";
 }
 
 export const deck_store = writable<Card[]>([
@@ -118,8 +119,8 @@ export function moveToEntryZone(cardToMove: Card) {
   }
 }
 
-// 핸드의 카드를 덱 맨 위로 이동시키는 함수
-export function moveCardToDeckTop(cardToMove: Card) {
+// 핸드의 카드를 덱 맨 위로 이동
+export function moveHandCardToDeckTop(cardToMove: Card) {
   hand_store.update((hand) => {
     const cardIndex = hand.findIndex(
       (card) => card.serial_number === cardToMove.serial_number
@@ -128,19 +129,18 @@ export function moveCardToDeckTop(cardToMove: Card) {
     if (cardIndex !== -1) {
       const [movedCard] = hand.splice(cardIndex, 1);
       deck_store.update((deck) => {
-        console.log("카드를 덱 맨 위로 이동:", movedCard.name);
+        console.log("핸드에서 덱 맨 위로 이동:", movedCard.name);
         return [movedCard, ...deck];
       });
-      return hand;
     } else {
-      console.log("해당하는 카드가 없습니다.");
-      return hand;
+      console.log("핸드에 해당 카드가 없습니다.");
     }
+    return hand;
   });
 }
 
-// 핸드의 카드를 덱 맨 아래로 이동시키는 함수
-export function moveCardToDeckBottom(cardToMove: Card) {
+// 핸드의 카드를 덱 맨 아래로 이동
+export function moveHandCardToDeckBottom(cardToMove: Card) {
   hand_store.update((hand) => {
     const cardIndex = hand.findIndex(
       (card) => card.serial_number === cardToMove.serial_number
@@ -149,13 +149,52 @@ export function moveCardToDeckBottom(cardToMove: Card) {
     if (cardIndex !== -1) {
       const [movedCard] = hand.splice(cardIndex, 1);
       deck_store.update((deck) => {
-        console.log("카드를 덱 맨 아래로 이동:", movedCard.name);
+        console.log("핸드에서 덱 맨 아래로 이동:", movedCard.name);
         return [...deck, movedCard];
       });
-      return hand;
     } else {
-      console.log("해당하는 카드가 없습니다.");
-      return hand;
+      console.log("핸드에 해당 카드가 없습니다.");
     }
+    return hand;
+  });
+}
+
+// 엔트리존의 카드를 덱 맨 위로 이동
+export function moveEntryCardToDeckTop(cardToMove: Card) {
+  entry_store.update((entry) => {
+    const cardIndex = entry.findIndex(
+      (card) => card.serial_number === cardToMove.serial_number
+    );
+
+    if (cardIndex !== -1) {
+      const [movedCard] = entry.splice(cardIndex, 1);
+      deck_store.update((deck) => {
+        console.log("엔트리존에서 덱 맨 위로 이동:", movedCard.name);
+        return [movedCard, ...deck];
+      });
+    } else {
+      console.log("엔트리존에 해당 카드가 없습니다.");
+    }
+    return entry;
+  });
+}
+
+// 엔트리존의 카드를 덱 맨 아래로 이동
+export function moveEntryCardToDeckBottom(cardToMove: Card) {
+  entry_store.update((entry) => {
+    const cardIndex = entry.findIndex(
+      (card) => card.serial_number === cardToMove.serial_number
+    );
+
+    if (cardIndex !== -1) {
+      const [movedCard] = entry.splice(cardIndex, 1);
+      deck_store.update((deck) => {
+        console.log("엔트리존에서 덱 맨 아래로 이동:", movedCard.name);
+        return [...deck, movedCard];
+      });
+    } else {
+      console.log("엔트리존에 해당 카드가 없습니다.");
+    }
+    return entry;
   });
 }

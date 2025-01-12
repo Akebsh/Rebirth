@@ -52,6 +52,7 @@
                 hp={card.hp}
                 position={card.position}
                 is_flipped={false}
+                zone="entry" 
             />
         </div>
     {/each}

@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { moveToEntryZone } from "$lib/store/cardStore";
     import { selectCard } from "$lib/store/cardStore"; 
-    import { moveCardToDeckTop, moveCardToDeckBottom } from "$lib/store/cardStore";
+    import { moveHandCardToDeckTop, moveHandCardToDeckBottom, moveEntryCardToDeckTop, moveEntryCardToDeckBottom } from "$lib/store/cardStore";
     
     export let serial_number: string;
     export let name: string;
@@ -11,6 +10,7 @@
     export let hp: number;
     export let position: number;
     export let is_flipped: boolean = false;
+    export let zone: "hand" | "entry";
 
     let show_action = false;
     let actions = ["덱 맨 위로", "덱 맨 아래로"];
@@ -30,29 +30,56 @@
         show_action = true;
     }
 
+    // 행동 실행
     function hideAction(action: string) {
         if (action === "덱 맨 위로") {
-            moveCardToDeckTop({
-                serial_number,
-                name,
-                description,
-                image_url,
-                atk,
-                hp,
-                position,
-                is_flipped
-            });
+            if (zone === "hand") {
+                moveHandCardToDeckTop({
+                    serial_number,
+                    name,
+                    description,
+                    image_url,
+                    atk,
+                    hp,
+                    position,
+                    is_flipped,
+                });
+            } else if (zone === "entry") {
+                moveEntryCardToDeckTop({
+                    serial_number,
+                    name,
+                    description,
+                    image_url,
+                    atk,
+                    hp,
+                    position,
+                    is_flipped,
+                });
+            }
         } else if (action === "덱 맨 아래로") {
-            moveCardToDeckBottom({
-                serial_number,
-                name,
-                description,
-                image_url,
-                atk,
-                hp,
-                position,
-                is_flipped
-            });
+            if (zone === "hand") {
+                moveHandCardToDeckBottom({
+                    serial_number,
+                    name,
+                    description,
+                    image_url,
+                    atk,
+                    hp,
+                    position,
+                    is_flipped,
+                });
+            } else if (zone === "entry") {
+                moveEntryCardToDeckBottom({
+                    serial_number,
+                    name,
+                    description,
+                    image_url,
+                    atk,
+                    hp,
+                    position,
+                    is_flipped,
+                });
+            }
         }
         show_action = false;
     }
