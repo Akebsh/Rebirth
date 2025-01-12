@@ -1,7 +1,44 @@
 <script lang="ts">
     import { drawCard } from "$lib/store/cardStore";
+    import { popupState, showDeckPopup, hideDeckPopup } from "$lib/store/cardStore";
+    import { get } from "svelte/store";
 
     export let deck_list: Array<any>;
+
+    let longPressTimer: number | null = null; // NodeJS.Timeout 대신 number 사용
+    let isLongPress = false;
+
+    function handleMouseDown(event: MouseEvent) {
+        console.log("Mouse down detected");
+        isLongPress = false; // 초기화
+        longPressTimer = window.setTimeout(() => {
+            console.log("Long press detected - Showing popup");
+            showDeckPopup(event.clientX, event.clientY); // 팝업 표시
+            isLongPress = true; // 길게 눌렀음을 표시
+        }, 1000); // 1초
+    }
+
+    function handleMouseUp() {
+        console.log("Mouse up detected");
+        if (longPressTimer !== null) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+    }
+
+     
+    function handleClick() {
+        if (!isLongPress) {
+            console.log("Short click detected - Drawing card");
+            drawCard(); // 짧은 클릭일 때만 카드 뽑기
+        }
+    }
+    function closePopup() {
+        hideDeckPopup();
+    }
+
+     // Action menu 상태 구독
+     $: actionMenu = $popupState; 
 
 </script>
 
@@ -14,6 +51,7 @@
         perspective: 1000px;
         cursor: pointer;
         background-color: #4f4fce;
+        position: relative;
     }
 
     .deck-counter {
@@ -31,9 +69,60 @@
         border: 2px solid #000;
     }
 
+  
+    .action-menu {
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #000;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 120px;
+        z-index: 9999;
+        position: fixed;
+    }
+
+    .action-menu-btn {
+        margin: 5px 0;
+        padding: 10px;
+        width: 100%;
+        background-color: #427cd8;
+        color: white;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .action-menu-btn:hover {
+        background-color: #1837d4;
+    }
 </style>
 
 <div class="zone-title">Deck</div>
-<div class="deck" on:click={drawCard} aria-hidden="true">
+<div class="deck" 
+on:mousedown={handleMouseDown}
+on:mouseup={handleMouseUp}
+on:mouseleave={handleMouseUp}
+
+on:click={handleClick} aria-hidden="true">
     <div class="deck-counter">{deck_list.length}</div>
 </div>
+
+<!-- Action Menu -->
+{#if actionMenu.showPopup}
+    <div
+        class="action-menu"
+        style="top: {Math.min(actionMenu.position.y, window.innerHeight - 120)}px; 
+               left: {Math.min(actionMenu.position.x, window.innerWidth - 120)}px;"
+    >
+        <button class="action-menu-btn" on:click={closePopup}>닫기</button>
+        <button class="action-menu-btn" on:click={() => console.log('Option 1')}>
+            옵션 1
+        </button>
+        <button class="action-menu-btn" on:click={() => console.log('Option 2')}>
+            옵션 2
+        </button>
+    </div>
+{/if}

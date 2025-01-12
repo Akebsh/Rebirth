@@ -4,6 +4,7 @@
     import { get } from "svelte/store";
 
     export let waiting_list: Array<any>;
+    
 
     function handleClick() {
         console.log("WaitingZone 클릭됨"); // 클릭 이벤트 확인
@@ -31,6 +32,7 @@
         overflow-x: auto;
         width: 131px;
         height: 181px;
+        overflow: hidden; 
     }
 
     .card-container {
@@ -40,6 +42,8 @@
 
 <div class="zone-title">WaitingZone</div>
 <div class="waiting-zone" on:click={handleClick}>
+    {#if waiting_list.length === 0}
+    {/if}
     {#each waiting_list as card}
         <div class="card-container">
             <Card
@@ -51,8 +55,9 @@
                 hp={card.hp}
                 position={card.position}
                 is_flipped={false}
-                zone="waiting" <!-- zone 값 전달 -->
+                zone="waiting" 
             />
         </div>
     {/each}
 </div>
+

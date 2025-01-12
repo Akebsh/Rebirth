@@ -10,7 +10,7 @@
     export let hp: number;
     export let position: number;
     export let is_flipped: boolean = false;
-    export let zone: "hand" | "entry";
+    export let zone: "hand" | "entry"| "waiting";
 
     let show_action = false;
     let actions = ["덱 맨 위로", "덱 맨 아래로"];
