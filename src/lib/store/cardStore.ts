@@ -285,3 +285,67 @@ export function moveTopCardToRevealZone() {
     return null;
   }
 }
+
+export function moveWaitingCardToDeckTop(cardToMove: Card) {
+  let current_waiting: Card[] = [];
+  let current_deck: Card[] = [];
+
+  // 현재 웨이팅존과 덱의 상태 가져오기
+  waiting_store.update((waiting) => {
+    current_waiting = [...waiting];
+    return waiting;
+  });
+  deck_store.update((deck) => {
+    current_deck = [...deck];
+    return deck;
+  });
+
+  // 웨이팅존에서 이동할 카드 찾기
+  const selected_card_index = current_waiting.findIndex(
+    (card) => card.serial_number === cardToMove.serial_number
+  );
+
+  if (selected_card_index !== -1) {
+    // 카드 이동 처리
+    const [moved_card] = current_waiting.splice(selected_card_index, 1);
+    moved_card.zone = "deck"; // zone 변경
+    deck_store.set([moved_card, ...current_deck]); // 덱 맨 아래로 추가
+    waiting_store.set(current_waiting); // 웨이팅존에서 제거
+
+    console.log("웨이팅존에서 덱 맨 위로 이동:", moved_card.name);
+  } else {
+    console.log("웨이팅존에 해당 카드가 없습니다.");
+  }
+}
+
+export function moveWaitingCardToDeckBottom(cardToMove: Card) {
+  let current_waiting: Card[] = [];
+  let current_deck: Card[] = [];
+
+  // 현재 웨이팅존과 덱의 상태 가져오기
+  waiting_store.update((waiting) => {
+    current_waiting = [...waiting];
+    return waiting;
+  });
+  deck_store.update((deck) => {
+    current_deck = [...deck];
+    return deck;
+  });
+
+  // 웨이팅존에서 이동할 카드 찾기
+  const selected_card_index = current_waiting.findIndex(
+    (card) => card.serial_number === cardToMove.serial_number
+  );
+
+  if (selected_card_index !== -1) {
+    // 카드 이동 처리
+    const [moved_card] = current_waiting.splice(selected_card_index, 1);
+    moved_card.zone = "deck"; // zone 변경
+    deck_store.set([...current_deck, moved_card]); // 덱 맨 아래로 추가
+    waiting_store.set(current_waiting); // 웨이팅존에서 제거
+
+    console.log("웨이팅존에서 덱 맨 아래로 이동:", moved_card.name);
+  } else {
+    console.log("웨이팅존에 해당 카드가 없습니다.");
+  }
+}

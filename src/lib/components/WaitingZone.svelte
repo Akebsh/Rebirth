@@ -1,10 +1,10 @@
 <script lang="ts">
-    import Card from "./Card.svelte";
-    import { pickCard, waiting_store, hand_store } from "$lib/store/cardStore";
-    import { get } from "svelte/store";
-    import type { Card as CardType } from "$lib/store/cardStore"; // Card 타입 가져오기
-  
-    export let waiting_list: CardType[] = []; // WaitingZone 카드 리스트
+  import Card from "./Card.svelte";
+  import { pickCard, waiting_store, hand_store } from "$lib/store/cardStore";
+  import { get } from "svelte/store";
+  import type { Card as CardType } from "$lib/store/cardStore";
+
+    export let waiting_list: CardType[]; // WaitingZone 카드 리스트
   
     let isHolding = false; // 꾹 누름 상태
     let holdTimeout: any; // 꾹 누름 타이머
@@ -74,11 +74,6 @@
     console.log("카드 목록 숨김");
   }
 
-  // 카드 클릭 핸들러
-  function handleCardClick(card: CardType) {
-    console.log("클릭된 카드:", card);
-    // 필요한 작업 구현 가능
-  }
   </script>
   
   <style>
@@ -150,23 +145,22 @@
   
   <div class="zone-title">WaitingZone</div>
   <div 
-  class="waiting-zone" 
-  on:click={handleClick}
-  on:mousedown={handleMouseDown}
-  on:mouseup={handleMouseUp}
-  on:mouseleave={handleMouseUp}
+    class="waiting-zone" 
+    on:click={handleClick}
+    on:mousedown={handleMouseDown}
+    on:mouseup={handleMouseUp}
+    on:mouseleave={handleMouseUp}
   >
-  {#if showCardList}
-
-  <div class="card-list-overlay">
-    <button class="close-button" on:click={closeCardList}>Close</button>
-    {#each waiting_list as card}
-      <div class="card-item" on:click={() => handleCardClick(card)}>
-        <Card {card} /> 
+    {#if showCardList}
+      <div class="card-list-overlay">
+        <button class="close-button" on:click={closeCardList}>Close</button>
+        {#each waiting_list as card}
+          <div class="card-item">
+            <Card {card} />
+          </div>
+        {/each}
       </div>
-    {/each}
-  </div>
-{/if}
+    {/if}
 
     {#each waiting_list as card, index}
       <div class="card-container" style="--index: {index}">
@@ -175,3 +169,4 @@
     {/each}
   </div>
   
+ 

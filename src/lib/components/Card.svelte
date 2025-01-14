@@ -1,6 +1,14 @@
 <script lang="ts">
-    import { selectCard, moveHandCardToDeckTop, moveHandCardToDeckBottom, moveEntryCardToDeckTop, moveEntryCardToDeckBottom } from "$lib/store/cardStore";
-    import type { Card } from "$lib/store/cardStore";
+    import {
+    selectCard,
+    moveHandCardToDeckTop,
+    moveHandCardToDeckBottom,
+    moveEntryCardToDeckTop,
+    moveEntryCardToDeckBottom,
+    moveWaitingCardToDeckTop, // 웨이팅존에서 덱 맨 위로 이동 함수 추가
+    moveWaitingCardToDeckBottom,
+  } from "$lib/store/cardStore";
+  import type { Card } from "$lib/store/cardStore";
 
     export let card: Card;
 
@@ -14,21 +22,25 @@
     }
 
     function hideAction(action: string) {
-        if (action === "덱 맨 위로") {
-            if (card.zone === "hand") {
-                moveHandCardToDeckTop(card);
-            } else if (card.zone === "entry") {
-                moveEntryCardToDeckTop(card);
-            }
-        } else if (action === "덱 맨 아래로") {
-            if (card.zone === "hand") {
-                moveHandCardToDeckBottom(card);
-            } else if (card.zone === "entry") {
-                moveEntryCardToDeckBottom(card);
-            }
-        }
-        show_action = false;
+    if (action === "덱 맨 위로") {
+      if (card.zone === "hand") {
+        moveHandCardToDeckTop(card);
+      } else if (card.zone === "entry") {
+        moveEntryCardToDeckTop(card);
+      } else if (card.zone === "waiting") {
+        moveWaitingCardToDeckTop(card); // 웨이팅존에서 덱 맨 위로 이동
+      }
+    } else if (action === "덱 맨 아래로") {
+      if (card.zone === "hand") {
+        moveHandCardToDeckBottom(card);
+      } else if (card.zone === "entry") {
+        moveEntryCardToDeckBottom(card);
+      } else if (card.zone === "waiting") {
+        moveWaitingCardToDeckBottom(card); // 웨이팅존에서 덱 맨 아래로 이동
+      }
     }
+    show_action = false;
+  }
 </script>
 
 <style>
