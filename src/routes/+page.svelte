@@ -2,8 +2,9 @@
     import Deck from "$lib/components/Deck.svelte";
     import EntryZone from "$lib/components/EntryZone.svelte";
     import HandZone from "$lib/components/HandZone.svelte";
+  import RevealZone from "$lib/components/RevealZone.svelte";
 
-    import { deck_store, hand_store, entry_store } from "$lib/store/cardStore";
+    import { deck_store, hand_store, entry_store, reveal_store } from "$lib/store/cardStore";
 </script>
 
 <!-- body -->
@@ -13,4 +14,6 @@
 <HandZone hand_list={$hand_store}></HandZone>
 <hr>
 <Deck deck_list={$deck_store}></Deck>
+<hr>
+<RevealZone reveal_list={$reveal_store}></RevealZone>
 

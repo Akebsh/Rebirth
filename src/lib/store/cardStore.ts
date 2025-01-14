@@ -23,7 +23,7 @@ export interface Card {
   hp: number;
   position: number;
   is_flipped: boolean;
-  zone: "deck" | "hand" | "entry";
+  zone: "deck" | "hand" | "entry" | "reveal";
 }
 
 export const deck_store = writable<Card[]>([
@@ -66,6 +66,7 @@ export const deck_store = writable<Card[]>([
 ]);
 export const hand_store = writable<Card[]>([]);
 export const entry_store = writable<Card[]>([]);
+export const reveal_store = writable<Card[]>([]);
 export const pickCard = writable<Card | null>(null);
 
 //드로우 함수
@@ -203,7 +204,7 @@ export function moveEntryCardToDeckTop(cardToMove: Card) {
 
   entry_store.update((entry) => {
     current_entry = [...entry];
-    return current_entry;
+    return entry;
   });
   deck_store.update((deck) => {
     current_deck = [...deck];
@@ -231,7 +232,7 @@ export function moveEntryCardToDeckBottom(cardToMove: Card) {
 
   entry_store.update((entry) => {
     current_entry = [...entry];
-    return current_entry;
+    return entry;
   });
   deck_store.update((deck) => {
     current_deck = [...deck];
@@ -250,5 +251,36 @@ export function moveEntryCardToDeckBottom(cardToMove: Card) {
     console.log("엔트리존에서 덱 맨 아래로 이동:", moved_card.name);
   } else {
     console.log("엔트리존에 해당 카드가 없습니다.");
+  }
+}
+
+export function moveTopCardToRevealZone() {
+  let current_deck: Card[] = [];
+  let current_reveal: Card[] = [];
+
+  // 덱 상태 가져오기
+  deck_store.update((deck) => {
+    current_deck = [...deck];
+    return deck;
+  });
+
+  // RevealZone 상태 가져오기
+  reveal_store.update((reveal) => {
+    current_reveal = [...reveal];
+    return reveal;
+  });
+
+  if (current_deck.length > 0) {
+    const top_card = current_deck.shift(); // 덱의 맨 위 카드 가져오기
+    if (top_card) {
+      top_card.zone = "reveal"; // zone 변경
+      reveal_store.set([...current_reveal, top_card]); // RevealZone에 추가
+    }
+    deck_store.set(current_deck); // 덱 상태 업데이트
+    console.log("덱 맨 위 카드가 RevealZone으로 이동: ", top_card?.name);
+    return top_card;
+  } else {
+    console.log("덱이 비었습니다.");
+    return null;
   }
 }

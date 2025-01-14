@@ -1,7 +1,13 @@
 <script lang="ts">
     import { drawCard } from "$lib/store/cardStore";
+    import { moveTopCardToRevealZone } from "$lib/store/cardStore";
 
     export let deck_list: Array<any>;
+
+    function handleRightClick(event: MouseEvent) {
+    event.preventDefault(); // 기본 우클릭 메뉴 비활성화
+    moveTopCardToRevealZone(); // 덱 맨 위 카드를 RevealZone으로 이동
+  }
 
 </script>
 
@@ -34,6 +40,11 @@
 </style>
 
 <div class="zone-title">Deck</div>
-<div class="deck" on:click={drawCard} aria-hidden="true">
+<div
+    class="deck"
+    on:click={drawCard} 
+    on:contextmenu={handleRightClick} 
+    aria-hidden="true"
+>
     <div class="deck-counter">{deck_list.length}</div>
 </div>
