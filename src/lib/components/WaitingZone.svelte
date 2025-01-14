@@ -1,6 +1,6 @@
 <script lang="ts">
   import Card from "./Card.svelte";
-  import { pickCard, waiting_store, hand_store } from "$lib/store/cardStore";
+  import { pickCard, waiting_store, hand_store, reveal_store } from "$lib/store/cardStore";
   import { get } from "svelte/store";
   import type { Card as CardType } from "$lib/store/cardStore";
 
@@ -18,6 +18,11 @@
       if (selectedCard) {
         console.log("선택된 카드:", selectedCard); // 선택된 카드 정보 출력
       
+  // RevealZone에서 제거
+      reveal_store.update((reveal) => 
+      reveal.filter((card) => card.serial_number !== selectedCard.serial_number)
+    );
+
         const alreadyInWaiting = get(waiting_store).some(
         (card) => card.serial_number === selectedCard.serial_number
       );
