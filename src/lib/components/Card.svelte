@@ -1,84 +1,30 @@
 <script lang="ts">
-    import { selectCard } from "$lib/store/cardStore"; 
-    import { moveHandCardToDeckTop, moveHandCardToDeckBottom, moveEntryCardToDeckTop, moveEntryCardToDeckBottom } from "$lib/store/cardStore";
-    
-    export let serial_number: string;
-    export let name: string;
-    export let description: string;
-    export let image_url: string;
-    export let atk: number;
-    export let hp: number;
-    export let position: number;
-    export let is_flipped: boolean = false;
-    export let zone: "hand" | "entry"| "waiting";
+    import { selectCard, moveHandCardToDeckTop, moveHandCardToDeckBottom, moveEntryCardToDeckTop, moveEntryCardToDeckBottom } from "$lib/store/cardStore";
+    import type { Card } from "$lib/store/cardStore";
+
+    export let card: Card;
 
     let show_action = false;
     let actions = ["덱 맨 위로", "덱 맨 아래로"];
 
 
     function isClicked(event: MouseEvent) {
-        selectCard({
-            serial_number,
-            name,
-            description,
-            image_url,
-            atk,
-            hp,
-            position,
-            is_flipped
-        }); // 카드 선택
+        selectCard(card); // 카드 객체를 그대로 전달
         show_action = true;
     }
 
-    // 행동 실행
     function hideAction(action: string) {
         if (action === "덱 맨 위로") {
-            if (zone === "hand") {
-                moveHandCardToDeckTop({
-                    serial_number,
-                    name,
-                    description,
-                    image_url,
-                    atk,
-                    hp,
-                    position,
-                    is_flipped,
-                });
-            } else if (zone === "entry") {
-                moveEntryCardToDeckTop({
-                    serial_number,
-                    name,
-                    description,
-                    image_url,
-                    atk,
-                    hp,
-                    position,
-                    is_flipped,
-                });
+            if (card.zone === "hand") {
+                moveHandCardToDeckTop(card);
+            } else if (card.zone === "entry") {
+                moveEntryCardToDeckTop(card);
             }
         } else if (action === "덱 맨 아래로") {
-            if (zone === "hand") {
-                moveHandCardToDeckBottom({
-                    serial_number,
-                    name,
-                    description,
-                    image_url,
-                    atk,
-                    hp,
-                    position,
-                    is_flipped,
-                });
-            } else if (zone === "entry") {
-                moveEntryCardToDeckBottom({
-                    serial_number,
-                    name,
-                    description,
-                    image_url,
-                    atk,
-                    hp,
-                    position,
-                    is_flipped,
-                });
+            if (card.zone === "hand") {
+                moveHandCardToDeckBottom(card);
+            } else if (card.zone === "entry") {
+                moveEntryCardToDeckBottom(card);
             }
         }
         show_action = false;
@@ -138,10 +84,10 @@
 <!-- body -->
 <div class="card" on:click={isClicked} aria-hidden="true">
     <div>
-        {#if is_flipped}
+        {#if card.is_flipped}
             <img src="" alt="back" />
         {:else}
-            <img src={image_url} alt={serial_number} />
+            <img src={card.image_url} alt={card.serial_number} />
         {/if}
     </div>
 </div>

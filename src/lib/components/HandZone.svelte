@@ -1,7 +1,8 @@
 <script lang="ts">
   import Card from "./Card.svelte";
+  import type { Card as CardType } from "$lib/store/cardStore";
 
-  export let hand_list: Array<any>;
+  export let hand_list: Array<CardType>;
 </script>
 
 <style>
@@ -27,17 +28,7 @@
 <div class="hand-zone">
   {#each hand_list as card}
       <div class="card-container">
-          <Card
-              serial_number={card.serial_number}
-              name={card.name}
-              description={card.description}
-              image_url={card.image_url}
-              atk={card.atk}
-              hp={card.hp}
-              position={card.position}
-              is_flipped={false}
-              zone="hand" 
-          />
+          <Card {card} /> <!-- card 객체를 통째로 전달 -->
       </div>
   {/each}
 </div>
