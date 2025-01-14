@@ -11,7 +11,7 @@
     let showCardList = false; // 카드 목록 표시 여부
 
   // 웨이팅존 클릭 핸들러
-  function handleClick() {
+     function handleClick() {
       console.log("WaitingZone 클릭됨"); // 클릭 이벤트 확인
       const selectedCard = get(pickCard); // 선택된 카드 가져오기
   
@@ -23,14 +23,14 @@
       reveal.filter((card) => card.serial_number !== selectedCard.serial_number)
     );
 
-        const alreadyInWaiting = get(waiting_store).some(
-        (card) => card.serial_number === selectedCard.serial_number
-      );
-      if (alreadyInWaiting) {
-        console.log("이미 웨이팅존에 있습니다.");
-        pickCard.set(null); // 초기화
-        return;
-      }
+    const alreadyInWaiting = get(waiting_store).some(
+  (card) => card.serial_number === selectedCard.serial_number
+);
+if (alreadyInWaiting) {
+  console.log("이미 웨이팅존에 있습니다.");
+  // pickCard를 초기화하지 않고 상태를 유지
+  return;
+}
 
         // 카드 이동
         selectedCard.zone = "waiting"; // zone을 "waiting"으로 설정
@@ -54,6 +54,10 @@
       }
     }
 
+   // 카드 선택 핸들러
+  function selectCardForEntry(card: CardType) {
+      pickCard.set(card); // 선택된 카드를 pickCard 상태에 저장
+     }
 
 
   // 꾹 누름 시작
@@ -156,16 +160,16 @@
     on:mouseup={handleMouseUp}
     on:mouseleave={handleMouseUp}
   >
-    {#if showCardList}
-      <div class="card-list-overlay">
-        <button class="close-button" on:click={closeCardList}>Close</button>
-        {#each waiting_list as card}
-          <div class="card-item">
-            <Card {card} />
-          </div>
-        {/each}
-      </div>
-    {/if}
+   {#if showCardList}
+    <div class="card-list-overlay">
+      <button class="close-button" on:click={closeCardList}>Close</button>
+      {#each waiting_list as card}
+        <div class="card-item" on:click={() => selectCardForEntry(card)}>
+          <Card {card} />
+        </div>
+      {/each}
+    </div>
+  {/if}
 
     {#each waiting_list as card, index}
       <div class="card-container" style="--index: {index}">
