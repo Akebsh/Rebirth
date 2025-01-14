@@ -13,16 +13,6 @@ interface Card {
   zone?: "hand" | "entry" | "waiting";
 }
 
-interface PopupState {
-  showPopup: boolean;
-  position: { x: number; y: number };
-}
-
-export const popupState = writable<PopupState>({
-  showPopup: false,
-  position: { x: 0, y: 0 },
-});
-
 export const deck_store = writable<Card[]>([
   {
     serial_number: "CP-0003",
@@ -208,22 +198,5 @@ export function moveEntryCardToDeckBottom(cardToMove: Card) {
       console.log("엔트리존에 해당 카드가 없습니다.");
     }
     return entry;
-  });
-}
-
-// 팝업 표시
-export function showDeckPopup(x: number, y: number) {
-  console.log("Showing popup at position:", x, y);
-  popupState.update(() => ({
-    showPopup: true,
-    position: { x, y },
-  }));
-  console.log("Popup state after update:", get(popupState));
-}
-// 팝업 닫기
-export function hideDeckPopup() {
-  popupState.set({
-    showPopup: false,
-    position: { x: 0, y: 0 },
   });
 }
