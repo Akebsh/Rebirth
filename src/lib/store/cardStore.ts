@@ -23,7 +23,7 @@ export interface Card {
   hp: number;
   position: number;
   is_flipped: boolean;
-  zone: "deck" | "hand" | "entry" | "reveal";
+  zone: "deck" | "hand" | "entry" | "reveal" | "waiting";
 }
 
 export const deck_store = writable<Card[]>([
@@ -67,6 +67,7 @@ export const deck_store = writable<Card[]>([
 export const hand_store = writable<Card[]>([]);
 export const entry_store = writable<Card[]>([]);
 export const reveal_store = writable<Card[]>([]);
+export const waiting_store = writable<Card[]>([]);
 export const pickCard = writable<Card | null>(null);
 
 //드로우 함수
