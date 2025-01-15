@@ -161,7 +161,7 @@ export function moveHandCardToDeckTop(cardToMove: Card) {
   if (selected_card_index !== -1) {
     const [moved_card] = current_hand.splice(selected_card_index, 1);
     moved_card.zone = "deck"; // zone 변경
-    deck_store.set([moved_card, ...current_deck]);
+    deck_store.set([...current_deck, moved_card]);
     hand_store.set(current_hand);
     console.log("핸드에서 덱 맨 위로 이동:", moved_card.name);
   } else {
@@ -219,7 +219,7 @@ export function moveEntryCardToDeckTop(cardToMove: Card) {
   if (selected_card_index !== -1) {
     const [moved_card] = current_entry.splice(selected_card_index, 1);
     moved_card.zone = "deck"; // zone 변경
-    deck_store.set([moved_card, ...current_deck]);
+    deck_store.set([...current_deck, moved_card]);
     entry_store.set(current_entry);
     console.log("엔트리존에서 덱 맨 위로 이동:", moved_card.name);
   } else {
@@ -309,7 +309,7 @@ export function moveWaitingCardToDeckTop(cardToMove: Card) {
     // 카드 이동 처리
     const [moved_card] = current_waiting.splice(selected_card_index, 1);
     moved_card.zone = "deck"; // zone 변경
-    deck_store.set([moved_card, ...current_deck]); // 덱 맨 아래로 추가
+    deck_store.set([...current_deck, moved_card]); // 덱 맨 아래로 추가
     waiting_store.set(current_waiting); // 웨이팅존에서 제거
 
     console.log("웨이팅존에서 덱 맨 위로 이동:", moved_card.name);
