@@ -118,8 +118,8 @@ if (alreadyInWaiting) {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 80%; /* 화면의 80% 너비 */
-      height: 80%; /* 화면의 80% 높이 */
+      width: 50%; 
+      height: 50%; 
       background-color: rgba(0, 0, 0, 0.9); /* 반투명 배경 */
       color: white;
       border: 2px solid #fff;

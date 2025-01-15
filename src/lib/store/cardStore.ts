@@ -23,7 +23,7 @@ export interface Card {
   hp: number;
   position: number;
   is_flipped: boolean;
-  zone: "deck" | "hand" | "entry" | "reveal" | "waiting";
+  zone: "deck" | "hand" | "entry" | "reveal" | "waiting" | "energy" | "partner";
 }
 
 export const disableFunctions = writable(true);
@@ -70,6 +70,8 @@ export const hand_store = writable<Card[]>([]);
 export const entry_store = writable<Card[]>([]);
 export const reveal_store = writable<Card[]>([]);
 export const waiting_store = writable<Card[]>([]);
+export const energy_store = writable<Card[]>([]);
+export const partner_store = writable<Card[]>([]);
 export const pickCard = writable<Card | null>(null);
 
 //드로우 함수
@@ -279,10 +281,6 @@ export function moveEntryCardToDeckBottom(cardToMove: Card) {
 }
 
 export function moveTopCardToRevealZone() {
-  if (get(disableFunctions)) {
-    return;
-  }
-
   let current_deck: Card[] = [];
   let current_reveal: Card[] = [];
 
