@@ -3,10 +3,16 @@
     import { pickCard, entry_store, hand_store, waiting_store } from "$lib/store/cardStore";
     import { get } from "svelte/store";
     import type { Card as CardType } from "$lib/store/cardStore"; // Card 타입 가져오기
-  
+    import { disableFunctions } from "$lib/store/cardStore";
+
     export let entry_list: CardType[]; // EntryZone 카드 리스트
-  
+
     function handleClick() {
+      console.log("disableFunctions 상태:", get(disableFunctions));
+      if (get(disableFunctions)) {
+    return;
+  }
+
      console.log("EntryZone 클릭됨"); // 클릭 이벤트 확인
      const selectedCard = get(pickCard); // 선택된 카드 가져오기
 
@@ -18,10 +24,14 @@
     );
     if (alreadyInEntry) {
       console.log("이미 엔트리존에 있습니다.");
+      pickCard.set(null);
       return;
     }
     // 카드 이동
     selectedCard.zone = "entry";
+    disableFunctions.set(true);
+  
+    console.log("disableFunctions 상태:", get(disableFunctions));
     entry_store.update((entry) => [...entry, { ...selectedCard }]); // 새로운 참조로 추가
     hand_store.update((hand) =>
       hand.filter((card) => card.serial_number !== selectedCard.serial_number)
@@ -32,6 +42,7 @@
 
     // 선택 상태 초기화
     pickCard.set(null);
+  
     console.log("카드가 엔트리로 이동:", selectedCard.name);
   } else {
     console.log("선택된 카드가 없습니다.");

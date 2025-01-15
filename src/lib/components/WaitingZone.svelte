@@ -3,6 +3,7 @@
   import { pickCard, waiting_store, hand_store, reveal_store } from "$lib/store/cardStore";
   import { get } from "svelte/store";
   import type { Card as CardType } from "$lib/store/cardStore";
+  import { disableFunctions } from "$lib/store/cardStore";
 
     export let waiting_list: CardType[]; // WaitingZone 카드 리스트
   
@@ -12,11 +13,19 @@
 
   // 웨이팅존 클릭 핸들러
      function handleClick() {
+      if (get(disableFunctions)) {
+    return;
+  }
+
       console.log("WaitingZone 클릭됨"); // 클릭 이벤트 확인
       const selectedCard = get(pickCard); // 선택된 카드 가져오기
   
       if (selectedCard) {
         console.log("선택된 카드:", selectedCard); // 선택된 카드 정보 출력
+        waiting_store.update((waiting) =>
+        waiting.filter((card) => card.serial_number !== selectedCard.serial_number)
+      );
+
       
   // RevealZone에서 제거
       reveal_store.update((reveal) => 
@@ -28,23 +37,20 @@
 );
 if (alreadyInWaiting) {
   console.log("이미 웨이팅존에 있습니다.");
-  // pickCard를 초기화하지 않고 상태를 유지
+  pickCard.set(null);
   return;
 }
 
-        // 카드 이동
-        selectedCard.zone = "waiting"; // zone을 "waiting"으로 설정
-        waiting_store.update((waiting) => [...waiting, { ...selectedCard }]); // 새로운 참조로 추가
-        hand_store.update((hand) =>
-          hand.filter((card, index) => {
-            // 같은 카드가 여러 장 있을 경우, 먼저 발견된 한 장만 제거
-            if (card.serial_number === selectedCard.serial_number) {
-              selectedCard.serial_number = ""; // 상태 초기화
-              return false; // 제거 대상
-            }
-            return true; // 유지 대상
-          })
-        );
+       // 카드 이동
+    selectedCard.zone = "waiting";
+    waiting_store.update((waiting) => {
+      const updated = [...waiting, { ...selectedCard }];
+      return updated;
+    });
+
+    hand_store.update((hand) =>
+      hand.filter((card) => card.serial_number !== selectedCard.serial_number)
+    );
   
         // 선택 상태 초기화
         pickCard.set(null);

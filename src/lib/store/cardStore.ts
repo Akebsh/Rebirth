@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 
 export const cardKeys = {
   serial_number: "serial_number",
@@ -25,6 +25,8 @@ export interface Card {
   is_flipped: boolean;
   zone: "deck" | "hand" | "entry" | "reveal" | "waiting";
 }
+
+export const disableFunctions = writable(true);
 
 export const deck_store = writable<Card[]>([
   {
@@ -103,11 +105,16 @@ export function drawCard() {
 // 카드 선택 함수
 export function selectCard(card: Card) {
   pickCard.set(card); // 선택된 카드를 상태로 저장
+  disableFunctions.set(false);
   console.log("카드 선택됨:", card.name);
 }
 
 // 엔트리존 이동
 export function moveToEntryZone(cardToMove: Card) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_hand: Card[] = [];
   let current_entry: Card[] = [];
 
@@ -142,6 +149,10 @@ export function moveToEntryZone(cardToMove: Card) {
 
 // 핸드의 카드를 덱 맨 위로 이동
 export function moveHandCardToDeckTop(cardToMove: Card) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_hand: Card[] = [];
   let current_deck: Card[] = [];
 
@@ -171,6 +182,10 @@ export function moveHandCardToDeckTop(cardToMove: Card) {
 
 // 핸드 덱 맨 아래
 export function moveHandCardToDeckBottom(cardToMove: Card) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_hand: Card[] = [];
   let current_deck: Card[] = [];
 
@@ -200,6 +215,10 @@ export function moveHandCardToDeckBottom(cardToMove: Card) {
 
 // 엔트리존의 카드를 덱 맨 위로 이동
 export function moveEntryCardToDeckTop(cardToMove: Card) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_entry: Card[] = [];
   let current_deck: Card[] = [];
 
@@ -228,6 +247,10 @@ export function moveEntryCardToDeckTop(cardToMove: Card) {
 }
 // 엔트리존의 카드를 덱 맨 아래로 이동
 export function moveEntryCardToDeckBottom(cardToMove: Card) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_entry: Card[] = [];
   let current_deck: Card[] = [];
 
@@ -256,6 +279,10 @@ export function moveEntryCardToDeckBottom(cardToMove: Card) {
 }
 
 export function moveTopCardToRevealZone() {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_deck: Card[] = [];
   let current_reveal: Card[] = [];
 
@@ -287,6 +314,10 @@ export function moveTopCardToRevealZone() {
 }
 
 export function moveWaitingCardToDeckTop(cardToMove: Card) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_waiting: Card[] = [];
   let current_deck: Card[] = [];
 
@@ -319,6 +350,10 @@ export function moveWaitingCardToDeckTop(cardToMove: Card) {
 }
 
 export function moveWaitingCardToDeckBottom(cardToMove: Card) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
   let current_waiting: Card[] = [];
   let current_deck: Card[] = [];
 

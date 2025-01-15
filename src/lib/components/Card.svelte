@@ -1,5 +1,6 @@
 <script lang="ts">
     import {
+    disableFunctions,
     selectCard,
     moveHandCardToDeckTop,
     moveHandCardToDeckBottom,
@@ -25,18 +26,24 @@
     if (action === "덱 맨 위로") {
       if (card.zone === "hand") {
         moveHandCardToDeckTop(card);
+        disableFunctions.set(true);
       } else if (card.zone === "entry") {
         moveEntryCardToDeckTop(card);
+        disableFunctions.set(true);
       } else if (card.zone === "waiting") {
         moveWaitingCardToDeckTop(card); // 웨이팅존에서 덱 맨 위로 이동
+        disableFunctions.set(true);
       }
     } else if (action === "덱 맨 아래로") {
       if (card.zone === "hand") {
         moveHandCardToDeckBottom(card);
+        disableFunctions.set(true);
       } else if (card.zone === "entry") {
         moveEntryCardToDeckBottom(card);
+        disableFunctions.set(true);
       } else if (card.zone === "waiting") {
         moveWaitingCardToDeckBottom(card); // 웨이팅존에서 덱 맨 아래로 이동
+        disableFunctions.set(true);
       }
     }
     show_action = false;
