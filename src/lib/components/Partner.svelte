@@ -57,8 +57,8 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 20px; /* 카드 간 여백을 20px로 늘림 */
-  padding: 20px; /* 존 전체의 여백을 추가 */
+  gap: 10px; /* 카드 간 여백을 20px로 늘림 */
+  padding: 60px; /* 존 전체의 여백을 추가 */
   border: 2px solid #000;
   background-color: #f9f9f9;
   overflow-x: auto; /* 여러 장의 카드를 배치하기 위한 스크롤 활성화 */

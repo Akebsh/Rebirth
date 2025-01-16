@@ -133,7 +133,7 @@
 <div class="card {card.is_horizontal ? 'horizontal' : ''}" on:click={isClicked} aria-hidden="true">
   <div>
       {#if card.is_flipped}
-          <img src="" alt="back" />
+          <img src="https://i.namu.wiki/i/dVqH44OcSp6ShiHSmSZsP1DGgi5iUOWNr0YL6H0_gU-pJBiwAQ_NMzQzh7dUXZLWk45e0pPhf5n-l4KAjg1JsA.webp" alt="" />
       {:else}
           <img src={card.image_url} alt={card.serial_number} />
       {/if}

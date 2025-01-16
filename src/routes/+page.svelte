@@ -52,7 +52,7 @@
     <WaitingZone waiting_list={$waiting_store}></WaitingZone>
   </div>
   <hr>
-  <div style="display: flex; gap: 250px;">
+  <div style="display: flex; gap: 50px;">
     <Energy energy_list={$energy_store}></Energy>
     <Partner partner_list={$partner_store}></Partner>
   </div>
