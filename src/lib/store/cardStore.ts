@@ -23,7 +23,15 @@ export interface Card {
   hp: number;
   position: number;
   is_flipped: boolean;
-  zone: "deck" | "hand" | "entry" | "reveal" | "waiting" | "energy" | "partner";
+  zone:
+    | "deck"
+    | "hand"
+    | "entry"
+    | "reveal"
+    | "waiting"
+    | "energy"
+    | "partner"
+    | `member-${"1" | "2" | "3"}`;
 }
 
 export const disableFunctions = writable(true);
@@ -73,6 +81,9 @@ export const waiting_store = writable<Card[]>([]);
 export const energy_store = writable<Card[]>([]);
 export const partner_store = writable<Card[]>([]);
 export const pickCard = writable<Card | null>(null);
+export const member_store_1 = writable<Card[]>([]);
+export const member_store_2 = writable<Card[]>([]);
+export const member_store_3 = writable<Card[]>([]);
 
 //드로우 함수
 export function drawCard() {
@@ -381,4 +392,45 @@ export function moveWaitingCardToDeckBottom(cardToMove: Card) {
   } else {
     console.log("웨이팅존에 해당 카드가 없습니다.");
   }
+}
+
+export function moveToMemberZone(cardToMove: Card, zoneId: "1" | "2" | "3") {
+  if (get(disableFunctions)) {
+    return;
+  }
+
+  let targetStore;
+  if (zoneId === "1") {
+    targetStore = member_store_1;
+  } else if (zoneId === "2") {
+    targetStore = member_store_2;
+  } else if (zoneId === "3") {
+    targetStore = member_store_3;
+  }
+
+  if (!targetStore) {
+    console.log("잘못된 멤버존 ID:", zoneId);
+    return;
+  }
+
+  const alreadyInZone = get(targetStore).some(
+    (card) => card.serial_number === cardToMove.serial_number
+  );
+  if (alreadyInZone) {
+    console.log(`카드가 이미 MemberZone ${zoneId}에 있습니다.`);
+    return;
+  }
+
+  targetStore.update((store) => [...store, { ...cardToMove }]); // 멤버존에 카드 추가
+
+  // 기존 위치에서 제거
+  hand_store.update((hand) =>
+    hand.filter((card) => card.serial_number !== cardToMove.serial_number)
+  );
+  waiting_store.update((waiting) =>
+    waiting.filter((card) => card.serial_number !== cardToMove.serial_number)
+  );
+
+  cardToMove.zone = `member-${zoneId}`; // zone 업데이트
+  console.log(`카드가 MemberZone ${zoneId}으로 이동:`, cardToMove.name);
 }
