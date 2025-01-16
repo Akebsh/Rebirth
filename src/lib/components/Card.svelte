@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {
+  import {
     disableFunctions,
     selectCard,
     moveHandCardToDeckTop,
@@ -8,21 +8,25 @@
     moveEntryCardToDeckBottom,
     moveWaitingCardToDeckTop, // 웨이팅존에서 덱 맨 위로 이동 함수 추가
     moveWaitingCardToDeckBottom,
+    moveMemberToDeckTop, // 멤버존에서 덱 맨 위로 이동 함수 추가
+    moveMemberToDeckBottom, // 멤버존에서 덱 맨 아래로 이동 함수 추가
+    member_store_1, // 추가
+    member_store_2, // 추가
+    member_store_3, // 추가
   } from "$lib/store/cardStore";
   import type { Card } from "$lib/store/cardStore";
 
-    export let card: Card;
+  export let card: Card;
 
-    let show_action = false;
-    let actions = ["덱 맨 위로", "덱 맨 아래로"];
+  let show_action = false;
+  let actions = ["덱 맨 위로", "덱 맨 아래로"];
 
+  function isClicked(event: MouseEvent) {
+    selectCard(card); // 카드 객체를 그대로 전달
+    show_action = true;
+  }
 
-    function isClicked(event: MouseEvent) {
-        selectCard(card); // 카드 객체를 그대로 전달
-        show_action = true;
-    }
-
-    function hideAction(action: string) {
+  function hideAction(action: string) {
     if (action === "덱 맨 위로") {
       if (card.zone === "hand") {
         moveHandCardToDeckTop(card);
@@ -32,6 +36,15 @@
         disableFunctions.set(true);
       } else if (card.zone === "waiting") {
         moveWaitingCardToDeckTop(card); // 웨이팅존에서 덱 맨 위로 이동
+        disableFunctions.set(true);
+      } else if (card.zone.startsWith("member-")) {
+        if (card.zone === "member-1") {
+          moveMemberToDeckTop(card, member_store_1);
+        } else if (card.zone === "member-2") {
+          moveMemberToDeckTop(card, member_store_2);
+        } else if (card.zone === "member-3") {
+          moveMemberToDeckTop(card, member_store_3);
+        }
         disableFunctions.set(true);
       }
     } else if (action === "덱 맨 아래로") {
@@ -43,6 +56,15 @@
         disableFunctions.set(true);
       } else if (card.zone === "waiting") {
         moveWaitingCardToDeckBottom(card); // 웨이팅존에서 덱 맨 아래로 이동
+        disableFunctions.set(true);
+      } else if (card.zone.startsWith("member-")) {
+        if (card.zone === "member-1") {
+          moveMemberToDeckBottom(card, member_store_1);
+        } else if (card.zone === "member-2") {
+          moveMemberToDeckBottom(card, member_store_2);
+        } else if (card.zone === "member-3") {
+          moveMemberToDeckBottom(card, member_store_3);
+        }
         disableFunctions.set(true);
       }
     }

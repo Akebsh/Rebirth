@@ -3,7 +3,7 @@
     import { get } from "svelte/store";
     import { pickCard, member_store_1, member_store_2, member_store_3, hand_store, waiting_store } from "$lib/store/cardStore";
   
-    export let member_lists = [
+    export const member_lists = [
       { id: "1", store: member_store_1 },
       { id: "2", store: member_store_2 },
       { id: "3", store: member_store_3 },

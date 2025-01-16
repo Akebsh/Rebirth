@@ -434,3 +434,83 @@ export function moveToMemberZone(cardToMove: Card, zoneId: "1" | "2" | "3") {
   cardToMove.zone = `member-${zoneId}`; // zone 업데이트
   console.log(`카드가 MemberZone ${zoneId}으로 이동:`, cardToMove.name);
 }
+
+// 멤버를 덱 맨 위로 이동
+export function moveMemberToDeckTop(
+  memberToMove: Card,
+  memberStore:
+    | typeof member_store_1
+    | typeof member_store_2
+    | typeof member_store_3
+) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
+  let current_members: Card[] = [];
+  let current_deck: Card[] = [];
+
+  memberStore.update((members) => {
+    current_members = [...members];
+    return members;
+  });
+
+  deck_store.update((deck) => {
+    current_deck = [...deck];
+    return deck;
+  });
+
+  const selected_member_index = current_members.findIndex(
+    (member) => member.serial_number === memberToMove.serial_number
+  );
+
+  if (selected_member_index !== -1) {
+    const [moved_member] = current_members.splice(selected_member_index, 1);
+    moved_member.zone = "deck"; // zone 변경
+    deck_store.set([moved_member, ...current_deck]); // 덱 맨 위로 이동
+    memberStore.set(current_members);
+    console.log("멤버를 덱 맨 위로 이동:", moved_member.name);
+  } else {
+    console.log("멤버 리스트에 해당 멤버가 없습니다.");
+  }
+}
+
+// 멤버를 덱 맨 아래로 이동
+export function moveMemberToDeckBottom(
+  memberToMove: Card,
+  memberStore:
+    | typeof member_store_1
+    | typeof member_store_2
+    | typeof member_store_3
+) {
+  if (get(disableFunctions)) {
+    return;
+  }
+
+  let current_members: Card[] = [];
+  let current_deck: Card[] = [];
+
+  memberStore.update((members) => {
+    current_members = [...members];
+    return members;
+  });
+
+  deck_store.update((deck) => {
+    current_deck = [...deck];
+    return deck;
+  });
+
+  const selected_member_index = current_members.findIndex(
+    (member) => member.serial_number === memberToMove.serial_number
+  );
+
+  if (selected_member_index !== -1) {
+    const [moved_member] = current_members.splice(selected_member_index, 1);
+    moved_member.zone = "deck"; // zone 변경
+    deck_store.set([...current_deck, moved_member]); // 덱 맨 아래로 이동
+    memberStore.set(current_members);
+    console.log("멤버를 덱 맨 아래로 이동:", moved_member.name);
+  } else {
+    console.log("멤버 리스트에 해당 멤버가 없습니다.");
+  }
+}
