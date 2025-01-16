@@ -7,6 +7,7 @@
     import RevealZone from "$lib/components/RevealZone.svelte";
     import WaitingZone from "$lib/components/WaitingZone.svelte";
     import MemberZone from "$lib/components/MemberZone.svelte";
+    import RebirthZone from "$lib/components/RebirthZone.svelte";
   
     import {
       deck_store,
@@ -19,30 +20,37 @@
       member_store_1,
       member_store_2,
       member_store_3,
+      rebirth_store
     } from "$lib/store/cardStore";
+
   </script>
   
   <!-- body -->
-  
-  <EntryZone entry_list={$entry_store}></EntryZone>
-  <hr>
-  <MemberZone
-    member_lists={[
-      { id: "1", store: member_store_1 },
-      { id: "2", store: member_store_2 },
-      { id: "3", store: member_store_3 },
-    ]}
-  />
-  <hr>
-  <HandZone hand_list={$hand_store}></HandZone>
-  <hr>
-  <Deck deck_list={$deck_store}></Deck>
-  <hr>
   <RevealZone reveal_list={$reveal_store}></RevealZone>
   <hr>
-  <WaitingZone waiting_list={$waiting_store}></WaitingZone>
+  <RebirthZone rebirth_list={$rebirth_store}></RebirthZone>
   <hr>
-  <Energy energy_list={$energy_store}></Energy>
+  <div style="display: flex; gap: 180px;">
+    <EntryZone entry_list={$entry_store}></EntryZone>
+    <Deck deck_list={$deck_store}></Deck>
+  </div>
   <hr>
-  <Partner partner_list={$partner_store}></Partner>
+  <div style="display: flex; gap: 30px;">
+    <MemberZone
+      member_lists={[
+        { id: "1", store: member_store_1 },
+        { id: "2", store: member_store_2 },
+        { id: "3", store: member_store_3 },
+      ]}
+    />
+    <WaitingZone waiting_list={$waiting_store}></WaitingZone>
+  </div>
+  <hr>
+  <div style="display: flex; gap: 250px;">
+    <Energy energy_list={$energy_store}></Energy>
+    <Partner partner_list={$partner_store}></Partner>
+  </div>
+  <hr>
+  <HandZone hand_list={$hand_store}></HandZone>
+
   

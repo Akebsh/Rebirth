@@ -23,6 +23,7 @@ export interface Card {
   hp: number;
   position: number;
   is_flipped: boolean;
+  is_horizontal: boolean;
   zone:
     | "deck"
     | "hand"
@@ -31,10 +32,18 @@ export interface Card {
     | "waiting"
     | "energy"
     | "partner"
-    | `member-${"1" | "2" | "3"}`;
+    | `member-${"1" | "2" | "3"}`
+    | "rebirth";
 }
 
 export const disableFunctions = writable(true);
+
+export function toggleCardOrientation(card: Card) {
+  card.is_horizontal = !card.is_horizontal; // 방향 토글
+  console.log(
+    `카드 방향이 변경되었습니다: ${card.name}, 가로 상태: ${card.is_horizontal}`
+  );
+}
 
 export const deck_store = writable<Card[]>([
   {
@@ -47,6 +56,7 @@ export const deck_store = writable<Card[]>([
     hp: 3,
     position: 0,
     is_flipped: false,
+    is_horizontal: false,
     zone: "deck",
   },
   {
@@ -59,6 +69,7 @@ export const deck_store = writable<Card[]>([
     hp: 3,
     position: 0,
     is_flipped: false,
+    is_horizontal: false,
     zone: "deck",
   },
   {
@@ -71,6 +82,7 @@ export const deck_store = writable<Card[]>([
     hp: 3,
     position: 0,
     is_flipped: false,
+    is_horizontal: false,
     zone: "deck",
   },
 ]);
@@ -84,6 +96,7 @@ export const pickCard = writable<Card | null>(null);
 export const member_store_1 = writable<Card[]>([]);
 export const member_store_2 = writable<Card[]>([]);
 export const member_store_3 = writable<Card[]>([]);
+export const rebirth_store = writable<Card[]>([]);
 
 //드로우 함수
 export function drawCard() {

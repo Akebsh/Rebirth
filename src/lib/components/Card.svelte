@@ -80,6 +80,8 @@
         border-radius: 9px;
         perspective: 1000px;
         cursor: pointer;
+        transition: transform 0.3s ease;
+        overflow: hidden;
     }
 
     img {
@@ -120,23 +122,28 @@
         background-color: #1837d4;
     }
 
+    .horizontal {
+    transform: rotate(90deg); /* 가로 방향으로 회전 */
+    transform-origin: center;
+  }
+
 </style>
 
 <!-- body -->
-<div class="card" on:click={isClicked} aria-hidden="true">
-    <div>
-        {#if card.is_flipped}
-            <img src="" alt="back" />
-        {:else}
-            <img src={card.image_url} alt={card.serial_number} />
-        {/if}
-    </div>
+<div class="card {card.is_horizontal ? 'horizontal' : ''}" on:click={isClicked} aria-hidden="true">
+  <div>
+      {#if card.is_flipped}
+          <img src="" alt="back" />
+      {:else}
+          <img src={card.image_url} alt={card.serial_number} />
+      {/if}
+  </div>
 </div>
 
 {#if show_action}
-    <div class="action-menu">
-        {#each actions as action}
-            <button class="action-menu-btn" on:click={() => hideAction(action)}>{action}</button>
-        {/each}
-    </div>
+  <div class="action-menu">
+      {#each actions as action}
+          <button class="action-menu-btn" on:click={() => hideAction(action)}>{action}</button>
+      {/each}
+  </div>
 {/if}
