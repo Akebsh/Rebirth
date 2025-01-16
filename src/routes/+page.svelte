@@ -8,6 +8,7 @@
     import WaitingZone from "$lib/components/WaitingZone.svelte";
     import MemberZone from "$lib/components/MemberZone.svelte";
     import RebirthZone from "$lib/components/RebirthZone.svelte";
+    import RetireZone from "$lib/components/RetireZone.svelte";
   
     import {
       deck_store,
@@ -20,15 +21,20 @@
       member_store_1,
       member_store_2,
       member_store_3,
-      rebirth_store
+      rebirth_store,
+      retire_store
     } from "$lib/store/cardStore";
 
   </script>
   
-  <!-- body -->
+ 
+    
+  
+  <div style="display: flex; gap: 50px;">
+    <RetireZone retire_list={$retire_store}></RetireZone>
+    <RebirthZone rebirth_list={$rebirth_store}></RebirthZone>
+  </div>
   <RevealZone reveal_list={$reveal_store}></RevealZone>
-  <hr>
-  <RebirthZone rebirth_list={$rebirth_store}></RebirthZone>
   <hr>
   <div style="display: flex; gap: 180px;">
     <EntryZone entry_list={$entry_store}></EntryZone>
@@ -52,5 +58,4 @@
   </div>
   <hr>
   <HandZone hand_list={$hand_store}></HandZone>
-
   

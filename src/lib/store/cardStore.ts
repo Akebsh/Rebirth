@@ -33,7 +33,8 @@ export interface Card {
     | "energy"
     | "partner"
     | `member-${"1" | "2" | "3"}`
-    | "rebirth";
+    | "rebirth"
+    | "retire";
 }
 
 export const disableFunctions = writable(true);
@@ -97,6 +98,7 @@ export const member_store_1 = writable<Card[]>([]);
 export const member_store_2 = writable<Card[]>([]);
 export const member_store_3 = writable<Card[]>([]);
 export const rebirth_store = writable<Card[]>([]);
+export const retire_store = writable<Card[]>([]);
 
 //드로우 함수
 export function drawCard() {
