@@ -54,17 +54,17 @@
   
   <style>
     .retire-zone {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
-        border: 2px solid #000;
-        background-color: #f9f9f9;
-        width: 201px;
-        height: 161px;
-    }
+    display: flex;
+    flex-direction: column; /* 카드들을 세로로 배치 */
+    justify-content: flex-start;
+    align-items: center;
+    gap: -30px; /* 카드들이 겹치도록 음수 간격 */
+    padding: 10px;
+    border: 2px solid #000;
+    background-color: #f9f9f9;
+    width: 70%;
+    height: 80%; /* 리타이어 존을 세로로 길게 확장 */
+  }
   
     .card-container {
       position: relative;

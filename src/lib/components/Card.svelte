@@ -1,18 +1,20 @@
 <script lang="ts">
   import {
+    moveCard, 
+    hand_store, 
+    entry_store, 
+    waiting_store, 
+    deck_store,
     disableFunctions,
     selectCard,
-    moveHandCardToDeckTop,
-    moveHandCardToDeckBottom,
-    moveEntryCardToDeckTop,
-    moveEntryCardToDeckBottom,
-    moveWaitingCardToDeckTop, // 웨이팅존에서 덱 맨 위로 이동 함수 추가
-    moveWaitingCardToDeckBottom,
-    moveMemberToDeckTop, // 멤버존에서 덱 맨 위로 이동 함수 추가
-    moveMemberToDeckBottom, // 멤버존에서 덱 맨 아래로 이동 함수 추가
     member_store_1, // 추가
     member_store_2, // 추가
     member_store_3, // 추가
+    reveal_store, 
+    energy_store, 
+    partner_store, 
+    rebirth_store, 
+    retire_store,
   } from "$lib/store/cardStore";
   import type { Card } from "$lib/store/cardStore";
 
@@ -27,49 +29,34 @@
   }
 
   function hideAction(action: string) {
-    if (action === "덱 맨 위로") {
-      if (card.zone === "hand") {
-        moveHandCardToDeckTop(card);
-        disableFunctions.set(true);
-      } else if (card.zone === "entry") {
-        moveEntryCardToDeckTop(card);
-        disableFunctions.set(true);
-      } else if (card.zone === "waiting") {
-        moveWaitingCardToDeckTop(card); // 웨이팅존에서 덱 맨 위로 이동
-        disableFunctions.set(true);
-      } else if (card.zone.startsWith("member-")) {
-        if (card.zone === "member-1") {
-          moveMemberToDeckTop(card, member_store_1);
-        } else if (card.zone === "member-2") {
-          moveMemberToDeckTop(card, member_store_2);
-        } else if (card.zone === "member-3") {
-          moveMemberToDeckTop(card, member_store_3);
-        }
-        disableFunctions.set(true);
-      }
-    } else if (action === "덱 맨 아래로") {
-      if (card.zone === "hand") {
-        moveHandCardToDeckBottom(card);
-        disableFunctions.set(true);
-      } else if (card.zone === "entry") {
-        moveEntryCardToDeckBottom(card);
-        disableFunctions.set(true);
-      } else if (card.zone === "waiting") {
-        moveWaitingCardToDeckBottom(card); // 웨이팅존에서 덱 맨 아래로 이동
-        disableFunctions.set(true);
-      } else if (card.zone.startsWith("member-")) {
-        if (card.zone === "member-1") {
-          moveMemberToDeckBottom(card, member_store_1);
-        } else if (card.zone === "member-2") {
-          moveMemberToDeckBottom(card, member_store_2);
-        } else if (card.zone === "member-3") {
-          moveMemberToDeckBottom(card, member_store_3);
-        }
-        disableFunctions.set(true);
-      }
-    }
+  const zoneToStoreMap: Record<Card["zone"], typeof hand_store | typeof entry_store | typeof waiting_store | typeof member_store_1 | typeof deck_store | typeof reveal_store | typeof energy_store | typeof partner_store | typeof retire_store> = {
+    hand: hand_store,
+    entry: entry_store,
+    waiting: waiting_store,
+    "member-1": member_store_1,
+    "member-2": member_store_2,
+    "member-3": member_store_3,
+    deck: deck_store,
+    reveal: reveal_store,
+    energy: energy_store,
+    partner: partner_store,
+    rebirth: rebirth_store,
+    retire: retire_store,
+  };
+
+  const fromStore = zoneToStoreMap[card.zone]; // 현재 카드의 존에 해당하는 스토어
+  const insertAtTop = action === "덱 맨 위로"; // 삽입 위치 결정
+
+  if (fromStore) {
+    moveCard(card, fromStore, deck_store, "deck", insertAtTop);
+    disableFunctions.set(true);
     show_action = false;
+  } else {
+    console.log(`존 ${card.zone}에 해당하는 스토어가 없습니다.`);
   }
+}
+
+
 </script>
 
 <style>
